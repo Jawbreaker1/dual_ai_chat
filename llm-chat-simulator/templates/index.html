@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dual LLM Chat (LM Studio)</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Markdown + sanering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+</head>
+<body>
+
+  <!-- Hero always visible -->
+  <section class="hero">
+    <div class="hero-inner">
+      <h1 class="hero-title">Dual LLM Chat</h1>
+      <p class="hero-subtitle">Two local LLMs debate & iterate your prompt.</p>
+    </div>
+  </section>
+
+  <!-- Main: two-column layout -->
+  <div class="main">
+    <div class="layout">
+      <!-- Left: Chat -->
+      <div class="col-chat">
+        <!-- Chat window -->
+        <div id="chat" class="chatbox">
+          {% if not messages %}
+            <div class="welcome">
+              <h3>Welcome to Dual LLM Chat</h3>
+              <p>Start by typing your first message below. Then Bot A and Bot B will take turns refining the answer.</p>
+              <ul>
+                <li>Use the behavior panel on the right to tweak their behavior.</li>
+                <li>Try <strong>Auto-play</strong> to watch an iterative debate.</li>
+                <li>Markdown is supported: lists, tables, and code blocks.</li>
+              </ul>
+            </div>
+          {% endif %}
+          {% for m in messages %}
+            {% if m.role == 'user' %}
+              <div class="msg user">
+                <div class="meta">User</div>
+                <div class="msg-content">{{ m.text }}</div>
+              </div>
+            {% elif m.role == 'botA' %}
+              <div class="msg a">
+                <div class="meta">Bot A</div>
+                <div class="msg-content">{{ m.text }}</div>
+              </div>
+            {% elif m.role == 'botB' %}
+              <div class="msg b">
+                <div class="meta">Bot B</div>
+                <div class="msg-content">{{ m.text }}</div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <!-- Start chat form (separate form) -->
+        <form id="startForm" action="{{ url_for('send') }}" method="post" style="margin-top:1rem;">
+          <div class="row">
+            <textarea class="input-start" name="user_input" rows="3" placeholder="Type your starting message..." required></textarea>
+          </div>
+        </form>
+
+        <!-- Controls row (outside the form to avoid nesting) -->
+        <div class="row" style="margin-top:0.5rem; gap:10px; align-items:center;">
+          <label class="meta">Auto turns:
+            <input form="startForm" type="number" name="turns" min="0" value="4" />
+          </label>
+          <button type="submit" class="btn btn-primary" form="startForm">Send & Start</button>
+          <button id="tickBtn" type="button" class="btn btn-secondary">Generate next turn</button>
+          <button id="autoBtn" type="button" class="btn btn-ghost">Auto-play</button>
+
+          <!-- Theme selector -->
+          <label class="meta" style="margin-left:auto;">Theme:
+            <select id="themeSelect" class="btn">
+              <option value="">Indigo (default)</option>
+              <option value="theme-orchid">Orchid</option>
+              <option value="theme-emerald">Emerald</option>
+              <option value="theme-ember">Ember</option>
+              <option value="theme-slate">Slate</option>
+            </select>
+          </label>
+
+          <!-- Reset as separate form -->
+          <form action="{{ url_for('reset') }}" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-danger">Reset</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right: Editable bot behaviors -->
+      <aside class="col-sidebar">
+        <form id="ctxForm" action="{{ url_for('update_context') }}" method="post">
+          <div class="card">
+            <div class="meta">Bot A behavior</div>
+            <textarea class="input-ctx" name="llm1_context" rows="8" required>{{ llm1_context }}</textarea>
+          </div>
+          <div class="card">
+            <div class="meta">Bot B behavior</div>
+            <textarea class="input-ctx" name="llm2_context" rows="8" required>{{ llm2_context }}</textarea>
+          </div>
+          <div class="controls" style="gap:10px;">
+            <button type="submit" class="btn btn-primary">Save behaviors</button>
+          </div>
+          <p class="meta" style="margin-top:6px;">Changes apply to future turns.</p>
+        </form>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // marked config
+    marked.setOptions({ breaks: true, gfm: true });
+  </script>
+  <script>
+    // server-driven autoplay after Send & Start
+    window.AUTO_TURNS_LEFT = {{ session.get('auto_turns_left', 0) | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Bot Contexts • Dual LLM Chat</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <span class="brand">🤖 Dual LLM Chat</span>
+      <span class="meta" style="margin-left:auto;">Edit bot contexts</span>
+      <form action="{{ url_for('reset') }}" method="post">
+        <button type="submit" class="btn btn-danger">Reset</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="main">
+    <form action="{{ url_for('update_context') }}" method="post">
+      <div class="card">
+        <label for="llm1_context" class="meta">Bot A Context</label>
+        <textarea id="llm1_context" name="llm1_context" rows="8" required>{{ llm1_context }}</textarea>
+      </div>
+      <div class="card">
+        <label for="llm2_context" class="meta">Bot B Context</label>
+        <textarea id="llm2_context" name="llm2_context" rows="8" required>{{ llm2_context }}</textarea>
+      </div>
+      <div class="controls" style="margin-top:8px; gap:10px;">
+        <a href="{{ url_for('chat') }}" class="btn btn-ghost" style="text-decoration:none;">Back</a>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
