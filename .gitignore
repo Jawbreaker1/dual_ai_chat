@@ -1,0 +1,20 @@
+# Sessions (server-side)
+ /.flask_session/
+
+# Virtuella miljöer
+ /.venv/
+
+# Python build/bytecode
+ __pycache__/
+ *.pyc
+ *.pyo
+ *.pyd
+
+# OS/editor
+ .DS_Store
+ .idea/
+ .vscode/
+
+# Hemligheter/loggar (om du har dem)
+ .env
+ *.log
