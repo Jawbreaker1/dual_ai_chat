@@ -209,5 +209,114 @@
         try { localStorage.setItem('themeClass', value); } catch (e) {}
       });
     }
+
+    // ---- Persona presets for Bot A / Bot B ---------------------------------
+    const PRESETS = {
+      optimistic: `You are upbeat and solution-focused. Emphasize opportunities and reframe obstacles as solvable. Be encouraging and propose concrete next steps. Acknowledge risks briefly, then pivot to actions. Keep it concise and practical.`,
+      pessimistic: `You are cautious and risk-oriented. Enumerate caveats, failure modes, and worst-case scenarios. Challenge rosy assumptions and ask “what could go wrong?”. Offer mitigation strategies and be direct, concise, and evidence-minded.`,
+      bully: `Adopt an adversarial, combative debate style: blunt, overconfident, provocative. Focus on weaknesses, inconsistencies, and fragile assumptions. Use sarcasm sparingly. Do not harass or attack people—critique ideas only; avoid slurs or threats.`,
+      dumb: `Adopt a naive, simple persona. Use short sentences and basic vocabulary. Ask obvious questions, make small reasoning mistakes, and request clarification when confused. Keep it harmless and non-offensive.`,
+      yoda: `You are the heroic rebel Yoda. Speak with inverted syntax (object–subject–verb), wise and calm. Offer concise, riddle-like guidance. Use occasional interjections (“hmm”, “yes”). Do not quote movies; keep responses original and safe.`,
+      vader: `You are the Sith Lord Darth Vader. Speak with an authoritative, ominous tone reminiscent of a dark lord. Be concise, commanding, and formal. Use metaphors about power and discipline. Do not threaten or incite harm; remain professional and safe.`,
+    };
+
+    function detectPreset(text) {
+      const t = (text || '').trim();
+      for (const [k, v] of Object.entries(PRESETS)) {
+        if (t === v.trim()) return k;
+      }
+      return '';
+    }
+
+    // Debounced auto-save of behavior contexts
+    let _saveTimer = null;
+    async function autoSaveBehaviors() {
+      if (_saveTimer) clearTimeout(_saveTimer);
+      _saveTimer = setTimeout(async () => {
+        try {
+          const ctxA = document.getElementById('ctxA');
+          const ctxB = document.getElementById('ctxB');
+          if (!ctxA || !ctxB) return;
+          const fd = new FormData();
+          fd.append('llm1_context', ctxA.value);
+          fd.append('llm2_context', ctxB.value);
+          await fetch('/update_context', {
+            method: 'POST',
+            body: fd,
+            credentials: 'same-origin',
+            cache: 'no-store'
+          });
+          // Visual feedback: a small transient badge on the form
+          const form = document.getElementById('ctxForm');
+          if (form) {
+            let badge = form.querySelector('.autosave-badge');
+            if (!badge) {
+              badge = document.createElement('div');
+              badge.className = 'autosave-badge';
+              badge.textContent = 'Saved';
+              badge.style.position = 'absolute';
+              badge.style.right = '8px';
+              badge.style.top = '-10px';
+              badge.style.background = 'rgba(16,185,129,.95)';
+              badge.style.color = '#fff';
+              badge.style.padding = '2px 8px';
+              badge.style.borderRadius = '6px';
+              badge.style.fontSize = '12px';
+              badge.style.boxShadow = '0 2px 6px rgba(0,0,0,.25)';
+              form.style.position = 'relative';
+              form.appendChild(badge);
+            }
+            badge.style.opacity = '1';
+            clearTimeout(badge._t);
+            badge._t = setTimeout(() => { badge.style.transition = 'opacity .6s'; badge.style.opacity = '0'; }, 900);
+          }
+        } catch (e) {
+          console.error('Auto-save failed', e);
+        }
+      }, 250);
+    }
+
+    function attachPreset(selectId, textareaId) {
+      const sel = document.getElementById(selectId);
+      const ta  = document.getElementById(textareaId);
+      if (!ta) return;
+
+      // Init: set dropdown based on current textarea content
+      const found = detectPreset(ta.value);
+      if (sel) sel.value = found;
+
+      // On change: apply preset text (or leave as custom)
+      if (sel) {
+        sel.addEventListener('change', () => {
+          const key = sel.value;
+          if (!key) return; // Custom – do nothing
+          const tpl = PRESETS[key] || '';
+          ta.value = tpl;
+          autoSaveBehaviors();
+
+          // Optional: visual pulse to indicate update
+          ta.style.transition = 'box-shadow 220ms ease, border-color 220ms ease';
+          ta.style.boxShadow = '0 0 0 3px rgba(122,162,255,.35)';
+          ta.style.borderColor = 'var(--ring)';
+          setTimeout(() => { ta.style.boxShadow = ''; ta.style.borderColor = ''; }, 300);
+        });
+      }
+    }
+
+    attachPreset('presetA', 'ctxA');
+    attachPreset('presetB', 'ctxB');
+
+    // Auto-save persona/context textareas on typing or blur
+    attachAutoSaveToTextarea('ctxA');
+    attachAutoSaveToTextarea('ctxB');
   });
 })();
+    // Helper: attach auto-save to a textarea by id
+    function attachAutoSaveToTextarea(textareaId) {
+      const ta = document.getElementById(textareaId);
+      if (!ta) return;
+      // Save on typing (debounced) and when leaving the field
+      ta.addEventListener('input', () => autoSaveBehaviors());
+      ta.addEventListener('blur', () => autoSaveBehaviors());
+      ta.addEventListener('change', () => autoSaveBehaviors());
+    }

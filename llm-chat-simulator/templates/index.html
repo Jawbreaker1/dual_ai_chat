@@ -99,11 +99,37 @@
         <form id="ctxForm" action="{{ url_for('update_context') }}" method="post">
           <div class="card">
             <div class="meta">Bot A behavior</div>
-            <textarea class="input-ctx" name="llm1_context" rows="8" required>{{ llm1_context }}</textarea>
+            <div class="controls" style="margin-bottom:6px;">
+              <label class="meta">Preset:
+                <select id="presetA" class="btn">
+                  <option value="">Custom</option>
+                  <option value="optimistic">Optimistic</option>
+                  <option value="pessimistic">Pessimistic</option>
+                  <option value="bully">Bully</option>
+                  <option value="dumb">Dumb</option>
+                  <option value="yoda">Yoda</option>
+                  <option value="vader">Darth Vader</option>
+                </select>
+              </label>
+            </div>
+            <textarea id="ctxA" class="input-ctx" name="llm1_context" rows="8" required>{{ llm1_context }}</textarea>
           </div>
           <div class="card">
             <div class="meta">Bot B behavior</div>
-            <textarea class="input-ctx" name="llm2_context" rows="8" required>{{ llm2_context }}</textarea>
+            <div class="controls" style="margin-bottom:6px;">
+              <label class="meta">Preset:
+                <select id="presetB" class="btn">
+                  <option value="">Custom</option>
+                  <option value="optimistic">Optimistic</option>
+                  <option value="pessimistic">Pessimistic</option>
+                  <option value="bully">Bully</option>
+                  <option value="dumb">Dumb</option>
+                  <option value="yoda">Yoda</option>
+                  <option value="vader">Darth Vader</option>
+                </select>
+              </label>
+            </div>
+            <textarea id="ctxB" class="input-ctx" name="llm2_context" rows="8" required>{{ llm2_context }}</textarea>
           </div>
           <div class="controls" style="gap:10px;">
             <button type="submit" class="btn btn-primary">Save behaviors</button>
