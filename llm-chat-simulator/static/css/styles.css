@@ -118,62 +118,123 @@ textarea:focus { border-color: var(--ring); box-shadow: 0 0 0 3px rgba(122,162,2
   .input-start::placeholder { color: #73809a; }
 }
 
-/* Buttons */
+/* === Professional button styles (refined) === */
 .btn {
   --btn-bg: var(--surface-2);
   --btn-fg: var(--text);
-  --btn-border: rgba(255,255,255,.10);
-  position: relative;
+  --btn-border: rgba(255,255,255,.14);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: .5rem;
-  padding: 10px 14px;
-  min-height: 40px;
-  border-radius: 999px;
+  padding: 8px 12px;
+  min-height: 36px;
+  border-radius: 8px;
   border: 1px solid var(--btn-border);
   color: var(--btn-fg);
   background: var(--btn-bg);
-  box-shadow: 0 1px 0 rgba(255,255,255,.06) inset, var(--shadow-1);
-  cursor: pointer; user-select: none;
-  transition: transform .15s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease;
+  box-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 1px 6px rgba(0,0,0,.18);
+  cursor: pointer;
+  user-select: none;
+  transition: background .2s ease, border-color .2s ease, box-shadow .2s ease, transform .02s ease;
 }
-.btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-2); }
-.btn:active { transform: translateY(0); box-shadow: var(--shadow-1); }
-.btn:focus-visible { outline: none; box-shadow: 0 0 0 4px rgba(122,162,255,.35); }
+.btn:hover { box-shadow: 0 3px 12px rgba(0,0,0,.22); }
+.btn:active { transform: translateY(0); box-shadow: 0 1px 6px rgba(0,0,0,.18); }
+.btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(122,162,255,.35), 0 1px 6px rgba(0,0,0,.18); }
+.btn:disabled { opacity: .6; cursor: not-allowed; box-shadow: 0 1px 0 rgba(255,255,255,.05) inset; }
 
 .btn-primary {
-  --btn-bg: linear-gradient(180deg, rgba(107,138,253,1), rgba(63,99,241,1));
+  --btn-bg: var(--primary);
   --btn-fg: #fff;
-  --btn-border: rgba(99,102,241,.6);
+  --btn-border: rgba(0,0,0,.14);
+  background: var(--primary);
+  border-color: rgba(0,0,0,.18);
 }
+.btn-primary:hover { filter: brightness(1.05); }
+.btn-primary:active { filter: brightness(0.98); }
+
 .btn-secondary {
-  --btn-bg: linear-gradient(180deg, rgba(155,123,255,1), rgba(125,86,255,1));
+  --btn-bg: var(--accent);
   --btn-fg: #fff;
-  --btn-border: rgba(125,86,255,.6);
+  --btn-border: rgba(0,0,0,.14);
+  background: var(--accent);
+  border-color: rgba(0,0,0,.18);
 }
+.btn-secondary:hover { filter: brightness(1.05); }
+.btn-secondary:active { filter: brightness(0.98); }
+
 .btn-ghost {
   --btn-bg: transparent;
   --btn-fg: var(--text);
-  --btn-border: rgba(255,255,255,.16);
-  backdrop-filter: var(--glass);
+  --btn-border: rgba(255,255,255,.18);
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.18);
 }
 .btn-ghost:hover { background: rgba(255,255,255,.06); }
+
 .btn-danger {
-  --btn-bg: linear-gradient(180deg, rgba(239,68,68,1), rgba(200,30,30,1));
+  --btn-bg: #e24545;
   --btn-fg: #fff;
-  --btn-border: rgba(239,68,68,.6);
+  --btn-border: rgba(0,0,0,.18);
+  background: #e24545;
+  border-color: rgba(0,0,0,.18);
+}
+.btn-danger:hover { filter: brightness(1.05); }
+.btn-danger:active { filter: brightness(0.98); }
+
+/* === Professional select & number input === */
+/* Stöd både <select class="select"> och äldre <select class="btn"> */
+.select, select.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 36px 8px 10px;
+  min-height: 36px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: var(--surface-2);
+  color: var(--text);
+  box-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 1px 6px rgba(0,0,0,.18);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23B6BED3'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+.select:focus-visible, select.btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(122,162,255,.35), 0 1px 6px rgba(0,0,0,.18); }
+.select:disabled, select.btn:disabled { opacity: .6; cursor: not-allowed; }
+@media (prefers-color-scheme: light) {
+  .select, select.btn {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='%23343b53'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  }
 }
 
-/* Inputs group */
+/* Number input som matchar kontrollerna */
+.input-num,
+input[type="number"] {
+  width: 88px;
+  min-height: 36px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 1px 6px rgba(0,0,0,.18);
+  outline: none;
+}
+.input-num:focus,
+input[type="number"]:focus { border-color: var(--ring); box-shadow: 0 0 0 3px rgba(122,162,255,.35), 0 1px 6px rgba(0,0,0,.18); }
+/* Ta bort webkit-spinners för renare look */
+.input-num::-webkit-outer-spin-button,
+.input-num::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.input-num { -moz-appearance: textfield; }
+input[type="number"] { -moz-appearance: textfield; }
+
 .controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 label { color: var(--muted); font-size: 14px; }
-input[type="number"] {
-  width: 80px; padding: 8px 10px; color: var(--text);
-  background: var(--surface-2); border: 1px solid rgba(255,255,255,.10);
-  border-radius: 10px; outline: none;
-}
-input[type="number"]:focus { border-color: var(--ring); box-shadow: 0 0 0 3px rgba(122,162,255,.25); }
 
 /* Cards (used in sidebar) */
 .card {
@@ -324,21 +385,60 @@ input[type="number"]:focus { border-color: var(--ring); box-shadow: 0 0 0 3px rg
 .a { border-left-width: 3px; box-shadow: 0 3px 8px rgba(107,138,253,.1); }
 .b { border-left-width: 3px; box-shadow: 0 3px 8px rgba(245,158,11,.1); }
 
-/* === THEME PALETTES === */
-/* Orchid: purple + pink */
+/* Dark Theme (replaces Orchid) — deep navy + violet glow */
 body.theme-orchid {
   background:
-    radial-gradient(1200px 800px at 10% 0%, rgba(168,85,247,.16), transparent 60%),
-    radial-gradient(1000px 700px at 100% 0%, rgba(236,72,153,.14), transparent 55%),
-    var(--bg);
+    radial-gradient(1200px 800px at 10% 0%, rgba(34,58,170,.20), transparent 60%),
+    radial-gradient(1000px 700px at 100% 0%, rgba(129,76,217,.18), transparent 55%),
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0)),
+    #0b0f1f;
 }
-.theme-orchid { --primary:#a855f7; --accent:#ec4899; --ring:#c084fc; }
-.theme-orchid .hero::before { background: radial-gradient(circle, rgba(168,85,247,.65), rgba(168,85,247,0)); }
-.theme-orchid .hero::after  { background: radial-gradient(circle, rgba(236,72,153,.6), rgba(236,72,153,0)); }
-.theme-orchid .btn-primary { --btn-bg: linear-gradient(180deg, #a855f7, #7c3aed); }
-.theme-orchid .btn-secondary { --btn-bg: linear-gradient(180deg, #ec4899, #db2777); }
-.theme-orchid .a { background: linear-gradient(180deg, rgba(168,85,247,.14), rgba(168,85,247,.075)); border: 1px solid rgba(168,85,247,.25); border-left-color:#a855f7; box-shadow: 0 4px 10px rgba(168,85,247,.14); }
-.theme-orchid .b { background: linear-gradient(180deg, rgba(245,158,11,.14), rgba(245,158,11,.075)); border: 1px solid rgba(245,158,11,.25); }
+/* Override core tokens so all components (chat, inputs, cards) follow the theme */
+.theme-orchid {
+  --bg: #0b0f1f;         /* page background */
+  --bg-elev: #10162b;    /* elevated regions */
+  --surface: #121936;    /* panels (chat) */
+  --surface-2: #0f1733;  /* controls (inputs/selects) */
+  --text: #e9edf7;
+  --muted: #a5aec7;
+  --primary: #4f6bff;    /* indigo */
+  --accent:  #9a8cff;    /* soft violet */
+  --ring:    #8ab4ff;    /* focus ring */
+}
+.theme-orchid .hero::before {
+  background: radial-gradient(circle, rgba(79,107,255,.55), rgba(79,107,255,0));
+}
+.theme-orchid .hero::after  {
+  background: radial-gradient(circle, rgba(154,140,255,.5), rgba(154,140,255,0));
+}
+/* Chat container & bubbles tuned for dark */
+.theme-orchid .chatbox {
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)), var(--surface);
+  border-color: rgba(138,180,255,.12);
+}
+.theme-orchid .a {
+  background: linear-gradient(180deg, rgba(79,107,255,.14), rgba(79,107,255,.08));
+  border: 1px solid rgba(79,107,255,.28);
+  border-left-color: #4f6bff;
+  box-shadow: 0 4px 12px rgba(79,107,255,.16);
+}
+.theme-orchid .b {
+  background: linear-gradient(180deg, rgba(245,158,11,.12), rgba(245,158,11,.06));
+  border: 1px solid rgba(245,158,11,.22);
+  border-left-color: #f59e0b;
+  box-shadow: 0 4px 12px rgba(245,158,11,.12);
+}
+/* Inputs & selects follow darker control surface */
+.theme-orchid textarea,
+.theme-orchid .select, .theme-orchid select.btn,
+.theme-orchid .input-num, .theme-orchid input[type="number"] {
+  background: var(--surface-2);
+  border-color: rgba(138,180,255,.16);
+}
+.theme-orchid .input-start {
+  background: #0e1430;
+  border-color: rgba(138,180,255,.35);
+}
 
 /* Emerald: green + teal */
 body.theme-emerald {
@@ -383,7 +483,6 @@ body.theme-slate {
 .theme-slate .btn-primary { --btn-bg: linear-gradient(180deg, #14b8a6, #0d9488); }
 .theme-slate .btn-secondary { --btn-bg: linear-gradient(180deg, #38bdf8, #0ea5e9); }
 .theme-slate .a { background: linear-gradient(180deg, rgba(20,184,166,.14), rgba(20,184,166,.075)); border: 1px solid rgba(20,184,166,.25); border-left-color:#14b8a6; box-shadow: 0 4px 10px rgba(20,184,166,.14); }
-.theme-slate .b { background: linear-gradient(180deg, rgba(245,158,11,.14), rgba(245,158,11,.075)); border: 1px solid rgba(245,158,11,.25); }
 
 /* === Typing indicator for next bot === */
 .msg.typing { opacity: .9; filter: saturate(.95); }

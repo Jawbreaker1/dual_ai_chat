@@ -70,7 +70,7 @@
         <!-- Controls row (outside the form to avoid nesting) -->
         <div class="row" style="margin-top:0.5rem; gap:10px; align-items:center;">
           <label class="meta">Auto turns:
-            <input form="startForm" type="number" name="turns" min="0" value="4" />
+            <input class="input-num" form="startForm" type="number" name="turns" min="0" value="4" />
           </label>
           <button type="submit" class="btn btn-primary" form="startForm">Send & Start</button>
           <button id="tickBtn" type="button" class="btn btn-secondary">Generate next turn</button>
@@ -78,9 +78,9 @@
 
           <!-- Theme selector -->
           <label class="meta" style="margin-left:auto;">Theme:
-            <select id="themeSelect" class="btn">
+            <select id="themeSelect" class="select">
               <option value="">Indigo (default)</option>
-              <option value="theme-orchid">Orchid</option>
+              <option value="theme-orchid">Dark</option>
               <option value="theme-emerald">Emerald</option>
               <option value="theme-ember">Ember</option>
               <option value="theme-slate">Slate</option>
@@ -101,7 +101,7 @@
             <div class="meta">Bot A behavior</div>
             <div class="controls" style="margin-bottom:6px;">
               <label class="meta">Preset:
-                <select id="presetA" class="btn">
+                <select id="presetA" class="select">
                   <option value="">Custom</option>
                   <option value="optimistic">Optimistic</option>
                   <option value="pessimistic">Pessimistic</option>
@@ -118,7 +118,7 @@
             <div class="meta">Bot B behavior</div>
             <div class="controls" style="margin-bottom:6px;">
               <label class="meta">Preset:
-                <select id="presetB" class="btn">
+                <select id="presetB" class="select">
                   <option value="">Custom</option>
                   <option value="optimistic">Optimistic</option>
                   <option value="pessimistic">Pessimistic</option>
